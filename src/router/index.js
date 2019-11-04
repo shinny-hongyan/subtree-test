@@ -1,12 +1,18 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
+import Tianqin from '../views/Tianqin.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
+    name: 'tianqin',
+    component: Tianqin
+  },
+  {
+    path: '/home',
     name: 'home',
     component: Home
   },
