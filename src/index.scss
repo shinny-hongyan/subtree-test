@@ -1,0 +1,233 @@
+$red: #F44336;
+$red-darken-3: #C62828;
+$green: #4CAF50;
+
+/*
+ * Theme definitions
+ */
+
+$themes: (
+  light: (
+    backgroundColor: #FFFFFF,
+    textColor: #000000,
+    backgroundLineStroke: #F6F6F6,
+    backgroundBorderLineStroke: #BDBDBD,
+    defaultStroke: #000000,
+
+    candleUpBodyStroke: $red,
+    candleUpBodyFill: #FFFFFF,
+    candleUpLineStroke: $red,
+    candleDownBodyFill: $green,
+    candleDownLineStroke: $green,
+    tradearrowUpFill: $red,
+    tradearrowDownStroke: $green,
+    posrectUpFill: $red,
+    posrectDownFill:  $green,
+    highlightBar: rgba(249, 212, 241, 0.781)
+  ),
+  dark: (
+    backgroundColor: #000000,
+    textColor: #FFFFFF,
+    backgroundLineStroke: #666666,
+    backgroundBorderLineStroke: #BDBDBD,
+    defaultStroke: #FFFFFF,
+
+    candleUpBodyStroke: $red,
+    candleUpBodyFill: #000000,
+    candleUpLineStroke: $red,
+    candleDownBodyFill: $green,
+    candleDownLineStroke: $green,
+    tradearrowUpFill: $red,
+    tradearrowDownStroke: $green,
+    posrectUpFill: $red,
+    posrectDownFill:  $green,
+    highlightBar: rgba(194, 99, 173, 0.781)
+  ),
+);
+
+/*
+ * Implementation of themes
+ */
+@mixin themify($themes) {
+  @each $theme, $map in $themes {
+    .theme-#{$theme} & {
+      $theme-map: () !global;
+      @each $key, $submap in $map {
+        $value: map-get(map-get($themes, $theme), '#{$key}');
+        $theme-map: map-merge($theme-map, ($key: $value)) !global;
+      }
+      @content;
+      $theme-map: null !global;
+    }
+  }
+}
+
+@function themed($key) {
+  @return map-get($theme-map, $key);
+}
+
+/*
+ * scss content
+ */
+
+svg.tqchart {
+  @include themify($themes) {
+    background-color: themed('backgroundColor');
+    color: themed('textColor');
+  }
+}
+
+g.background {
+  line {
+    &.bgline {
+      @include themify($themes) {
+        stroke: themed('backgroundLineStroke');
+      }
+    }
+    &.border {
+      @include themify($themes) {
+        stroke: themed('backgroundBorderLineStroke');
+      }
+    }
+    stroke-width: 1;
+  }
+}
+
+g.bgShapes {
+  rect.highlight {
+    @include themify($themes) {
+      fill: themed('highlightBar');
+    }
+  }
+}
+
+g.main.marks {
+  g.tradearrow {
+    path.up {
+      @include themify($themes) {
+        fill: themed('tradearrowUpFill');
+      }
+    }
+    path.down {
+      @include themify($themes) {
+        stroke: themed('tradearrowDownStroke');
+      }
+    }
+  }
+  
+  g.posrect {
+    rect {
+      fill-opacity: 0.2;
+    }
+    rect.profit {
+      @include themify($themes) {
+        fill: themed('posrectUpFill');
+      }
+    }
+    rect.loss {
+      @include themify($themes) {
+        fill: themed('posrectDownFill');
+      }
+    }
+  }
+}
+
+// 默认属性
+text {
+  @include themify($themes) {
+    fill: themed('textColor');
+  }
+}
+
+path {
+  fill: none;
+}
+
+text.symbol {
+  fill: $red;
+}
+
+g.loading {
+  text {
+    fill: #CCCCCC;
+  }
+}
+
+// kline style
+path.candle,
+path.kline,
+path.klines,
+path.volume {
+  @include themify($themes) {
+    stroke: themed('defaultStroke');
+  }
+  stroke-width: 1;
+  cursor: pointer;
+
+  &.body {
+    &.up {
+      @include themify($themes) {
+        stroke: themed('candleUpBodyStroke');
+        fill: themed('candleUpBodyFill');
+      }
+      stroke-width: 1;
+    }
+    &.down {
+      @include themify($themes) {
+        fill: themed('candleDownBodyFill');
+      }
+      stroke-width: 0;
+    }
+  }
+
+  &.line {
+    &.up {
+      @include themify($themes) {
+        stroke: themed('candleUpLineStroke');
+      }
+      fill: none;
+    }
+    &.down {
+      @include themify($themes) {
+        stroke: themed('candleDownLineStroke');
+      }
+      fill: none;
+    }
+  }
+}
+
+path.oi {
+  stroke-width: 1;
+  stroke: $red-darken-3;
+}
+
+// crosshair
+rect.crosshair-cursor {
+  //cursor: crosshair;
+  fill: transparent;
+  stroke: none;
+}
+
+rect.crosshair-cursor.drag {
+  cursor: grabbing;
+}
+
+g.kline.panel {
+  rect {
+    @include themify($themes) {
+      fill: themed('backgroundLineStroke');
+    }
+    fill-opacity: 0.98;
+  }
+  text {
+    @include themify($themes) {
+      fill: themed('textColor');
+    }
+    tspan.up {
+      fill: $red;
+    }
+    tspan.down {
+      fill: $green;
+    }
+  }
+}
