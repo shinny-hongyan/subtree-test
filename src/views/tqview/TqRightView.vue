@@ -98,9 +98,17 @@
         this.height = this.$root.windowHeight
       },
       onClickTool (tool_id) {
-        this.toggleRightPane()
-        if (this.paneOpened) this.selectedBtnToolId = tool_id
-        else this.selectedBtnToolId = ''
+        if (this.paneOpened) {
+          if (this.selectedBtnToolId === tool_id) {
+            this.toggleRightPane()
+            this.selectedBtnToolId = ''
+          } else {
+            this.selectedBtnToolId = tool_id
+          }
+        } else {
+          this.toggleRightPane()
+          this.selectedBtnToolId = tool_id
+        }
       }
     },
     created () {

@@ -1,13 +1,14 @@
 import Vue from 'vue'
 import App from './App.vue'
+import TQSDK from 'tqsdk'
 import './plugins/iview'
-import './registerServiceWorker'
 import router from './router'
 import store from './store'
 
 
 Vue.config.productionTip = false
-Vue.prototype.$eventHub = new Vue(); // Global event bus
+Vue.$eventHub = new Vue(); // Global event bus
+Vue.prototype.$eventHub = Vue.$eventHub;
 
 const RootData = {
   name: 'tianqin-web',
@@ -46,5 +47,19 @@ const RootApp = new Vue({
   errorCaptured: (err, vm, info) => {
     console.error('App.errorCaptured', err, vm, info)
     return false
-  }
-}).$mount('#app')
+  },
+  destroyed: () => {}
+})
+
+GetTqsdkUrl().then(function(urlJson){
+  let ins_url = urlJson['ins_url']
+  let md_url = urlJson['md_url']
+  let ws_url = urlJson['ws_url']
+  Vue.$tqsdk = new TQSDK({
+    symbolsServerUrl: ins_url,
+    wsQuoteUrl: md_url,
+    wsTradeUrl: ws_url
+  })
+  Vue.prototype.$tqsdk = Vue.$tqsdk
+  RootApp.$mount('#app')
+})

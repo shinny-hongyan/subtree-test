@@ -40,10 +40,10 @@
           group: 'a',
           icon: 'md-add'
         }, {
-          id: 'help',
+          id: 'theme',
           type: 'icon',
           group: 'b',
-          icon: 'md-arrow-dropright'
+          icon: 'md-contrast'
         }]
       }
     },
@@ -52,7 +52,9 @@
         this.bottomHeight = this.$root.windowHeight - this.width
       },
       onClickTool (tool_id) {
-        console.log(tool_id)
+        if (tool_id === 'theme') {
+            this.$eventHub.$emit('changeTheme')
+        }
       }
     },
     created () {

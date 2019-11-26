@@ -38,4 +38,5 @@
         }
       }
     }
+    @import "~tqchart/dist/tqchart";
 </style>

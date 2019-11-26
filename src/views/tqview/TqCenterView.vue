@@ -4,12 +4,30 @@
         <tq-layout-area :width="width"
                         :height="topHeight"
                         :otherStyle="{backgroundColor: '#FEFEFE'}">
+            <tq-chart-tool @on-change-duration="onChangeDuration"></tq-chart-tool>
+            <ButtonGroup size="small" shape="circle">
+                <Button @click="switchSymbol('pre')">
+                    <Icon type="ios-arrow-back"></Icon>
+                    pre
+                </Button>
+                <Button @click="switchSymbol('next')">
+                    next
+                    <Icon type="ios-arrow-forward"></Icon>
+                </Button>
+            </ButtonGroup>
         </tq-layout-area>
         <!-- 中间 K线图 -->
         <tq-layout-area :top="topHeight"
                         :width="width"
                         :height="centerHeight"
                         :otherStyle="{backgroundColor: '#FEFEFE'}">
+            <tq-chart-components
+                    :instrumentId="instrumentId"
+                    :duration="duration"
+                    :height="centerHeight"
+                    :width="width"
+                    :theme="theme"
+            ></tq-chart-components>
         </tq-layout-area>
         <!-- 下侧面板 -->
         <tq-layout-area verticalAlign="bottom"
@@ -19,17 +37,25 @@
                           backgroundColor: '#FEFEFE',
                           boxShadow: showBottomShadow ? '0px -3px 4px -1px #AFAFAF' : ''}">
             <div class="bottom-area-handle" @mousedown="handleMousedown"></div>
+            <logs></logs>
         </tq-layout-area>
     </div>
 </template>
 <script>
+    import Vue from 'vue'
   import TqLayoutArea from '@/components/layouts/TqLayoutArea.vue'
+    import TqChartTool from '@/components/charts/TqChartTool.vue'
+    import TqChartComponents from '@/components/charts/TqChartComponents'
+    import Logs from '@/components/logs'
   import {on, off} from '@/utils/dom'
   const Thickness = 4
   export default {
     name: 'tq-center-view',
     components: {
-      TqLayoutArea
+      TqLayoutArea,
+      TqChartComponents,
+      TqChartTool,
+      Logs
     },
     props: {
       width: Number,
@@ -47,7 +73,13 @@
         bottomYOffsetMax: this.$root.windowHeight - _bottomHeightMin,
         bottomHeight: this.$root.windowHeight - defaultTopHeight - 400 - Thickness,
         isMoving: false,
-        showBottomShadow: false
+        showBottomShadow: false,
+
+        instrumentId: '',
+        duration: 60000000000,
+        subscribed: [],
+        action: 'run',
+        theme: 'light'
       }
     },
     methods: {
@@ -81,14 +113,60 @@
         this.isMoving = false
         off(document, 'mousemove', this.handleMove)
         off(document, 'mouseup', this.handleUp)
+      },
+      onChangeDuration(d) {
+        let [originStr, num, unit] = d.match(/^([0-9]+)([a-zA-Z]+)$/)
+        if (unit === 'day') {
+          this.duration = 60 * 1e9
+        } else if (unit === 'm') {
+          this.duration = num * 60 * 1e9
+        } else if (unit === 'h') {
+          this.duration = num * 3600 * 1e9
+        } else if (unit === 'd') {
+          this.duration = num * 24 * 3600 * 1e9
+        }
+      },
+      switchSymbol(d){
+        let i = this.subscribedIndex
+        if (d === 'pre') {
+          i = i === 0 ? this.subscribed.length - 1 : i-1
+        } else if (d === 'next') {
+          i = i === (this.subscribed.length - 1) ? 0 : i+1
+        }
+        if (i !== this.subscribedIndex){
+          this.subscribedIndex = i
+          this.instrumentId = Array.isArray(this.subscribed[i].symbol) ? this.subscribed[i].symbol[0] : this.subscribed[i].symbol
+          this.duration = this.subscribed[i].dur_nano || 60 * 1e9
+        }
+        console.log(d)
       }
     },
     created () {
       this.$eventHub.$on('window_resize', this.onResize)
+      let self = this
+
+      this.$tqsdk.on('rtn_data', function(){
+        // 记录下全局的 user_id
+        let trade = self.$tqsdk.get_by_path(['trade'])
+        let user_id = Object.keys(trade)[0]
+        if (user_id) {
+          self.$store.commit('set_user_id', {user_id})
+        }
+        self.subscribed = self.$tqsdk.get_by_path(['subscribed'])
+        if (self.subscribed && self.subscribed[0] && self.instrumentId === '') {
+          self.subscribedIndex = 0
+          self.instrumentId = Array.isArray(self.subscribed[0].symbol) ? self.subscribed[0].symbol[0] : self.subscribed[0].symbol
+          self.duration = self.subscribed[0].dur_nano || 60 * 1e9
+        }
+      })
+      this.$eventHub.$on('changeTheme', function (){
+        self.theme = self.theme === 'light' ? 'dark' : 'light'
+      })
     }
   }
 </script>
 <style lang="scss">
+
     .bottom-area-handle {
         position: absolute;
         left: 0;
