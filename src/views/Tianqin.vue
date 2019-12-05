@@ -1,65 +1,90 @@
 <template>
   <div class="tq-home">
-      <div class="layout-area layout-area-left"
-           :style="{width: leftAreaWidth + 'px'}">
-          <tq-left-view :width="leftAreaWidth"></tq-left-view>
+      <div class="layout-area header-container">
+        <tq-header-view :height="headerHeight" :width="$root.windowWidth"></tq-header-view>
       </div>
-      <div class="layout-area layout-area-center"
-            :style="{width: centerAreaWidth + 'px', left: centerAreaLeft + 'px'}">
-          <tq-center-view :width="centerAreaWidth"></tq-center-view>
+      <div class="layout-area top-container" :style="{height:topHeight+'px'}">
+        <tq-top-view :height="topHeight" :width="$root.windowWidth"></tq-top-view>
       </div>
-      <div class="layout-area layout-area-right"
-           :style="{width: rightArea.width + 'px'}">
-          <tq-right-view :width="rightArea.width"
-                         :pagesWidth="rightArea.pagesWidth"
-                         :toolsBarWidth="rightArea.toolsBarWidth"
-                         @onopen="onOpenHandler"
-                         @onclose="onCloseHandler"></tq-right-view>
+      <div class="layout-area bottom-container" :style="{
+                            height:bottomHeight+'px',
+                            top: bottomYOffset+4+'px',
+                            backgroundColor: '#FEFEFE',
+                          boxShadow: showBottomShadow ? '0px -3px 4px -1px #AFAFAF' : ''}">
+          <div class="bottom-area-handle" @mousedown="handleMousedown"></div>
+          <tq-bottom-view :height="bottomHeight" :width="$root.windowWidth"></tq-bottom-view>
       </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import TqLeftView from './tqview/TqLeftView.vue'
-import TqCenterView from './tqview/TqCenterView.vue'
-import TqRightView from './tqview/TqRightView.vue'
+  import TqHeaderView from './tianqinViews/TqHeaderView.vue'
+  import TqTopView from './tianqinViews/TqTopView.vue'
+  import TqBottomView from './tianqinViews/TqBottomView.vue'
+import {on, off} from '@/utils/dom'
 
-const DefaultBarWidth = 38
+const HeaderHeight = 38
 const Thickness = 4
+const BottomHeightMin = 56
 
 export default {
   name: 'tq-home',
   components: {
-    TqLeftView,
-    TqRightView,
-    TqCenterView
+    TqHeaderView,
+    TqTopView,
+    TqBottomView
   },
   data () {
+    let defaultTopHeight = 400
+    let _bottomYOffset = HeaderHeight + defaultTopHeight + Thickness
     return {
-      leftAreaWidth: DefaultBarWidth,
-      centerAreaLeft: DefaultBarWidth + Thickness,
-      rightArea: {
-        width: DefaultBarWidth,
-        pagesWidth: 300,
-        toolsBarWidth: DefaultBarWidth
-      }
-    }
-  },
-  computed : {
-    centerAreaWidth () {
-      return this.$root.windowWidth - this.leftAreaWidth - this.rightArea.width - 2 * Thickness
+      isMoving: false,
+      headerHeight: HeaderHeight,
+      topHeight: defaultTopHeight,
+      topHeightMin: 260, // 中间高度最小值
+      bottomYOffset: _bottomYOffset,
+      bottomYOffsetMin: HeaderHeight * 2,
+      bottomYOffsetMax: this.$root.windowHeight - BottomHeightMin,
+      bottomHeight: this.$root.windowHeight - _bottomYOffset - Thickness,
+      showBottomShadow: false
     }
   },
   methods: {
-    onOpenHandler () {
-      this.rightArea.width = this.rightArea.pagesWidth + this.rightArea.toolsBarWidth
+    onResize () {
+      this.bottomYOffsetMax = this.$root.windowHeight - BottomHeightMin
+      this.computeLayouts()
     },
-    onCloseHandler () {
-      this.rightArea.width = this.rightArea.toolsBarWidth
+    handleMousedown (e) {
+      this.isMoving = true
+      on(document, 'mousemove', this.handleMove)
+      on(document, 'mouseup', this.handleUp)
+    },
+    handleMove (e) {
+      let pageOffset = e.pageY
+      if (pageOffset >= this.bottomYOffsetMax || pageOffset <= this.bottomYOffsetMin) return
+      this.bottomYOffset = pageOffset
+      this.computeLayouts()
+    },
+    handleUp () {
+      this.isMoving = false
+      off(document, 'mousemove', this.handleMove)
+      off(document, 'mouseup', this.handleUp)
+    },
+    computeLayouts() {
+      let bottomHeight = this.$root.windowHeight - this.bottomYOffset
+      if (bottomHeight <= BottomHeightMin) {
+        bottomHeight = BottomHeightMin
+        this.bottomYOffset = this.$root.windowHeight - bottomHeight
+      }
+      this.showBottomShadow = this.bottomYOffset < this.topHeightMin + HeaderHeight
+      this.bottomHeight = bottomHeight - Thickness
+      let topContainerHeight = this.$root.windowHeight - HeaderHeight - bottomHeight - Thickness
+      this.topHeight = Math.max(topContainerHeight, this.topHeightMin)
     }
   },
   created() {
+    this.$eventHub.$on('window_resize', this.onResize)
+    this.computeLayouts()
   }
 }
 </script>
@@ -72,10 +97,26 @@ export default {
         background-color: #E0E0E0;
         .layout-area {
             position: absolute;
-            height: 100%;
-            &.layout-area-right{
-                top: 0px;
-                right: 0px;
+            &.header-container {
+                height: 38px;
+                width: 100%;
+                background-color: #FFFFFF;
+            }
+            &.top-container {
+                top: 42px;
+                width: 100%;
+            }
+            &.bottom-container {
+                width: 100%;
+                background-color: #FFFFFF;
+                .bottom-area-handle {
+                    position: absolute;
+                    left: 0;
+                    top: -3px;
+                    height: 7px;
+                    width: 100%;
+                    cursor: ns-resize;
+                }
             }
         }
     }

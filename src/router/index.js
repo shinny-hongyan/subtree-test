@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import TianqinTwo from '../views/TianqinTwo.vue'
+import TianqinHome from '../views/TianqinHome.vue'
 
 Vue.use(VueRouter)
 
@@ -8,7 +9,7 @@ const routes = [
   {
     path: '/',
     name: 'tianqin',
-    component: TianqinTwo
+    component: TianqinHome
   }
 ]
 

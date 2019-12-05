@@ -1,3 +1,4 @@
+import moment from 'moment'
 export function RandomStr(len = 8) {
   let charts = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ".split('')
   let s = ''
@@ -8,26 +9,6 @@ export function RandomStr(len = 8) {
 export function FormatPrice(price, priceTick = 2) {
   if (typeof price === 'number') return price.toFixed(priceTick)
   else return price
-}
-
-export function FormatDatetime(datetime) {
-  let dt = null
-  if (typeof datetime === 'number') {
-    if (datetime > 1000000000000 && datetime < 3000000000000) {
-      // 说明dt是介于 2001 - 2065 年之间的毫秒数
-      dt = new Date(datetime)
-    } else {
-      dt = new Date(datetime / 1000000)
-    }
-    let YYYY = dt.getFullYear() + ''
-    let MM = (dt.getMonth() + 1 + '').padStart(2, '0')
-    let DD = (dt.getDate() + '').padStart(2, '0')
-    let hh = (dt.getHours() + '').padStart(2, '0')
-    let mm = (dt.getMinutes() + '').padStart(2, '0')
-    let ss = (dt.getSeconds() + '').padStart(2, '0')
-    let SSS = (dt.getMilliseconds() + '').padStart(3, '0')
-    return YYYY + '/' + MM + '/' + DD + '-' + hh + ':' + mm + ':' + ss + '.' + SSS
-  } else return dt
 }
 
 export function FormatDirection(value) {
@@ -46,7 +27,7 @@ export function FormatOffset(value) {
     case 'OPEN':
       return '开'
     case 'CLOSE':
-      return '平昨'
+      return '平'
     case 'CLOSETODAY':
       return '平今'
     default:
@@ -92,3 +73,18 @@ export function ObjectToArray(obj, arr, key, fn) {
     }
   }
 }
+
+export function ParseDuartionToString (duration) {
+  let parseString = ''
+  if (duration && duration >= 1e9) {
+    const dur = moment.duration(duration / 1e9, 'seconds')
+    if (dur.years() > 0) parseString += dur.years() + 'Y'
+    if (dur.months() > 0) parseString += dur.months() + 'M'
+    if (dur.days() > 0) parseString += dur.days() + 'D'
+    if (dur.hours() > 0) parseString += dur.hours() + 'h'
+    if (dur.minutes() > 0) parseString += dur.minutes() + 'm'
+    if (dur.seconds() > 0) parseString += dur.seconds() + 's'
+  }
+  return parseString
+}
+

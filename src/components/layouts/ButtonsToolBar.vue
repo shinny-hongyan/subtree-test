@@ -39,6 +39,9 @@
     </div>
 </template>
 <script>
+  /**
+   * 垂直方向 button tool bar
+   */
   export default {
     name: 'tq-layout-absolute',
     data () {

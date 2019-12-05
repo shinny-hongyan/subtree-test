@@ -9,7 +9,7 @@ Vue.prototype.$Modal = Modal;
 Vue.prototype.$Notice = Notice;
 Vue.prototype.$Spin = Spin;
 
-import {Layout, Icon, ButtonGroup, Button, Dropdown, DropdownMenu, DropdownItem} from 'view-design';
+import {Layout, Icon, ButtonGroup, Button, Dropdown, DropdownMenu, DropdownItem, Badge, Radio, RadioGroup, Tabs, TabPane} from 'view-design';
 Vue.component('Layout', Layout);
 Vue.component('Icon', Icon);
 Vue.component('Button', Button);
@@ -17,6 +17,16 @@ Vue.component('ButtonGroup', ButtonGroup);
 Vue.component('Dropdown', Dropdown);
 Vue.component('DropdownMenu', DropdownMenu);
 Vue.component('DropdownItem', DropdownItem);
+Vue.component('Badge', Badge);
+Vue.component('Radio', Radio);
+Vue.component('RadioGroup', RadioGroup);
+Vue.component('Tabs', Tabs);
+Vue.component('TabPane', TabPane);
+
+
+
+
+
 
 
 

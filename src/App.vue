@@ -1,13 +1,18 @@
 <template>
   <div id="app">
-    <!--<div id="nav">-->
-        <!--<router-link to="/">Home</router-link> |-->
-      <!--<router-link to="/home">Home</router-link> |-->
-      <!--<router-link to="/about">About</router-link>-->
-    <!--</div>-->
-      <router-view/>
+      <tianqin></tianqin>
   </div>
 </template>
+
+<script>
+    import Tianqin from '@/views/Tianqin.vue'
+  export default {
+    name: 'tq-app',
+    components: {
+      Tianqin
+    },
+  }
+</script>
 
 <style lang="scss">
     html, body {
@@ -17,26 +22,20 @@
         color: #4a4a4a;
         font-size: 12px;
         height: 100%!important;
+        width: 100%!important;
         overflow: hidden;
     }
 
     #app {
         width: 100%;
         height: 100%;
+        margin: 0;
+        padding: 0;
         position: relative;
-    }
-
-    #nav {
-      padding: 30px;
-
-      a {
-        font-weight: bold;
-        color: #2c3e50;
-
-        &.router-link-exact-active {
-          color: #42b983;
-        }
-      }
+        display: flex;
+        flex-direction: column;
+        text-align: center;
+        overflow: hidden;
     }
     @import "~tqchart/dist/tqchart";
 </style>

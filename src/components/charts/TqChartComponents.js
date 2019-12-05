@@ -146,11 +146,11 @@ export default {
       // 如果是回测就定位到某个 trade 的位置去，只定位一次
       if (self.action === 'run' && self.$tqsdk.get_by_path(['action']) === 'backtest') {
         // 得到某一个 trade, 定位到那里去
-        let user_id = self.$store.state.user_id
-        if (user_id) {
+        let account_id = self.$store.state.account_id
+        if (account_id) {
           let trades = self.$tqsdk.get({
             name: 'trades',
-            user_id
+            user_id: account_id
           })
           for(let trade_id in trades){
             let trade = trades[trade_id]
@@ -188,13 +188,13 @@ export default {
         }
       }
     })
-    this.$eventHub.$on('selectReportId', function (trade){
+    this.$eventHub.$on('moveChartToDt', function (datetime){
       this.$tqsdk.set_chart({
         chart_id: CHART_ID_FOCUS,
         symbol: chartInstance.symbol,
         duration: chartInstance.duration,
         view_width: chartInstance.bar.barNumbers,
-        focus_datetime: trade.trade_date_time, // 日线及以上周期是交易日，其他周期是时间，UnixNano 北京时间
+        focus_datetime: datetime, // 日线及以上周期是交易日，其他周期是时间，UnixNano 北京时间
         focus_position: Math.floor(chartInstance.bar.barNumbers / 2) // 指定K线位于屏幕的相对位置,0 表示位于最左端
       })
     })
@@ -234,11 +234,11 @@ export default {
       }
     },
     updatePositionLine (snapshot) { // 持仓线
-      let user_id = this.$store.state.user_id
-      if (!user_id) return
+      let account_id = this.$store.state.account_id
+      if (!account_id) return
       let pos = this.$tqsdk.get({
         name: 'position',
-        user_id,
+        user_id: account_id,
         symbol: chartInstance.symbol
       })
       if (pos && pos.volume_long > 0) {
@@ -275,21 +275,20 @@ export default {
       }
     },
     updateTrades (updateAll) { // 成交标记
-      let user_id = this.$store.state.user_id
-      if (user_id) {
-        let trades =this.$tqsdk.get({
-          name: 'trades',
-          user_id
-        })
-        for(let trade_id in trades){
-          let trade = trades[trade_id]
-          if (updateAll) {
-            if (trade.volume > 0 && trade.symbol === chartInstance.symbol) {
-              chartInstance.addTradeArrow(trade_id, trade)
-            }
-          } else if (trade._epoch === this.$tqsdk.dm._epoch && trade.volume > 0 && trade.symbol === chartInstance.symbol) {
+      let account_id = this.$store.state.account_id
+      if (!account_id) return
+      let trades =this.$tqsdk.get({
+        name: 'trades',
+        user_id: account_id
+      })
+      for(let trade_id in trades){
+        let trade = trades[trade_id]
+        if (updateAll) {
+          if (trade.volume > 0 && trade.symbol === chartInstance.symbol) {
             chartInstance.addTradeArrow(trade_id, trade)
           }
+        } else if (trade._epoch === this.$tqsdk.dm._epoch && trade.volume > 0 && trade.symbol === chartInstance.symbol) {
+          chartInstance.addTradeArrow(trade_id, trade)
         }
       }
     },

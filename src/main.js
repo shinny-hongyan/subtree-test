@@ -2,9 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import TQSDK from 'tqsdk'
 import './plugins/iview'
-import router from './router'
 import store from './store'
-
 
 Vue.config.productionTip = false
 Vue.$eventHub = new Vue(); // Global event bus
@@ -18,7 +16,6 @@ const RootData = {
 
 const RootApp = new Vue({
   data: RootData,
-  router,
   store,
   render: h => h(App),
   methods: {
@@ -51,6 +48,12 @@ const RootApp = new Vue({
   destroyed: () => {}
 })
 
+Vue.filter('toFixed', function (value, decs) {
+  let n = Number(value)
+  decs = Number.isInteger(decs) ? decs : 2
+  return Number.isFinite(n) ? n.toFixed(decs) : value
+})
+
 GetTqsdkUrl().then(function(urlJson){
   let ins_url = urlJson['ins_url']
   let md_url = urlJson['md_url']
@@ -61,5 +64,21 @@ GetTqsdkUrl().then(function(urlJson){
     wsTradeUrl: ws_url
   })
   Vue.prototype.$tqsdk = Vue.$tqsdk
+  Vue.$tqsdk.on('rtn_data', function(){
+    let backtest = Vue.$tqsdk.get_by_path(['_tqsdk_backtest'])
+    if (backtest && backtest.current_dt) {
+      store.state.start_dt = backtest.start_dt
+      store.state.end_dt = backtest.end_dt
+    }
+    let action = Vue.$tqsdk.get_by_path(['action'])
+    if (store.state.mode === '' && action)
+      store.commit('set_action', action)
+  })
+  Vue.$tqsdk.defaultTradeWs.on('close', function(){
+    store.commit('set_py_file_status', false)
+  })
+  Vue.$tqsdk.defaultTradeWs.on('open', function(){
+    store.commit('set_py_file_status', true)
+  })
   RootApp.$mount('#app')
 })

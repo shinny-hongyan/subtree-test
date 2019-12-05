@@ -4,17 +4,27 @@
         <tq-layout-area :width="width"
                         :height="topHeight"
                         :otherStyle="{backgroundColor: '#FEFEFE'}">
-            <tq-chart-tool @on-change-duration="onChangeDuration"></tq-chart-tool>
-            <ButtonGroup size="small" shape="circle">
-                <Button @click="switchSymbol('pre')">
-                    <Icon type="ios-arrow-back"></Icon>
-                    pre
-                </Button>
-                <Button @click="switchSymbol('next')">
-                    next
-                    <Icon type="ios-arrow-forward"></Icon>
-                </Button>
-            </ButtonGroup>
+            <tq-layout-area :width="topHeight" :height="topHeight">
+                <img class="logo" alt="Tianqin" src="@/assets/logo.png"
+                     :style="{padding: '4px',
+                          width: topHeight + 'px',
+                          height: topHeight + 'px'}">
+            </tq-layout-area>
+            <tq-layout-area :width="300" :height="topHeight" :left="topHeight" :style="{paddingTop: '6px'}">
+                <tq-chart-tool @on-change-duration="onChangeDuration"></tq-chart-tool>
+            </tq-layout-area>
+            <tq-layout-area :width="120" :height="topHeight" :left="topHeight + 300" :style="{paddingTop: '6px'}">
+                <ButtonGroup size="small" shape="circle">
+                    <Button @click="switchSymbol('pre')">
+                        <Icon type="ios-arrow-back"></Icon>
+                        pre
+                    </Button>
+                    <Button @click="switchSymbol('next')">
+                        next
+                        <Icon type="ios-arrow-forward"></Icon>
+                    </Button>
+                </ButtonGroup>
+            </tq-layout-area>
         </tq-layout-area>
         <!-- 中间 K线图 -->
         <tq-layout-area :top="topHeight"
@@ -146,12 +156,6 @@
       let self = this
 
       this.$tqsdk.on('rtn_data', function(){
-        // 记录下全局的 user_id
-        let trade = self.$tqsdk.get_by_path(['trade'])
-        let user_id = Object.keys(trade)[0]
-        if (user_id) {
-          self.$store.commit('set_user_id', {user_id})
-        }
         self.subscribed = self.$tqsdk.get_by_path(['subscribed'])
         if (self.subscribed && self.subscribed[0] && self.instrumentId === '') {
           self.subscribedIndex = 0

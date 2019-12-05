@@ -1,0 +1,65 @@
+<template>
+    <div class="tq-header-view">
+        <tq-layout-area :height="height"
+            :otherStyle="{backgroundColor: '#FEFEFE'}">
+            <a href="https://www.shinnytech.com/tianqin/" target="_blank">
+                <img class="logo" alt="Tianqin" src="@/assets/logo.png"
+                     :style="{padding: '4px',
+                          width: height + 'px',
+                          height: height + 'px'}">
+            </a>
+        </tq-layout-area>
+        <tq-layout-area :height="height" :left="height" :width="240"
+                        :otherStyle="{paddingTop: '8px'}">
+            <!-- 策略名称 -->
+            {{$store.state.file_name}}
+        </tq-layout-area>
+        <tq-layout-area :height="height" :left="height + 240" :width="300"
+                        :otherStyle="{paddingTop: '8px'}">
+            <!-- 账户名称 / 回测区间 / 复盘时间、速度、控制器 -->
+            <div v-if="$store.state.mode === 'run'">账户：{{$store.state.broker_id}},{{$store.state.account_id}} </div>
+            <div v-if="$store.state.mode === 'backtest'"> {{formatDt($store.state.start_dt)}} -- {{formatDt($store.state.end_dt)}} </div>
+        </tq-layout-area>
+        <tq-layout-area :height="height" :width="160" :horizontalAlign="'right'" :otherStyle="{paddingTop: '8px'}">
+            <!-- py文件 / 行情状态 / 交易状态 -->
+            <Badge :color="!$store.state.py_file_status ? 'red' : 'green'" text="py文件" />
+            <Badge :color="!$store.state.md_url_status ? 'red' : 'green'" text="行情" />
+            <Badge v-if="$store.state.broker_id !== 'TQSIM'" :color="!$store.state.td_url_status ? 'red' : 'green'" text="交易" />
+        </tq-layout-area>
+    </div>
+</template>
+<script>
+  import TqLayoutArea from '@/components/layouts/TqLayoutArea.vue'
+  import moment from 'moment'
+  export default {
+    name: 'tq-header-view',
+    components: {
+      TqLayoutArea
+    },
+    props: {
+      height: Number
+    },
+    methods: {
+      formatDt(dt) {
+        return moment(dt / 1000000).format('YYYY-MM-DD HH:mm:ss')
+      }
+    }
+  }
+</script>
+<style lang="scss">
+    .tq-header-view {
+        width: 100%;
+        .ivu-badge-status  {
+            &:not(:last-child) {
+                padding-right: 10px;
+            }
+            .ivu-badge-status-dot {
+                width: 10px;
+                height: 10px;
+            }
+            .ivu-badge-status-text {
+                margin-left: 2px;
+            }
+        }
+    }
+</style>
