@@ -124,6 +124,8 @@ class ChartController {
       _tempLeftId = 0
       _tempRightId = _tempLeftId + this.tqchart.bar.barNumbers - 1
       return this.range.reset(_tempLeftId, _tempRightId)
+    } else if (_tempLeftId >= 0 && m > 0) {
+      return this.range.reset(_tempLeftId, _tempRightId)
     }
     return false
   }
@@ -163,7 +165,7 @@ class ChartController {
     }
     // 几种情况 dt 介于 [leftId, rightId]
     let [l, r] = [leftId, rightId]
-    r = r <= klines.last_id ? r : klines.last_id // 可能整个图的right_id 大于 klines.last_id， 这个时候就改用 last_id 判断
+    r = r <= klines.last_id ? r : klines.last_id // 可能整个图的 right_id 大于 klines.last_id， 这个时候就改用 last_id 判断
     if (!klines.data[l] || !klines.data[r]) {
       // 如果没有 l, r 都没有数据直接返回 null，klines 在 leftId, rightId 这两个点没有数据
       return null

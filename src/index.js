@@ -16,21 +16,19 @@ const ChartMouseStatus = {
   cross: 1, // 十字
   paused: 2 // 不监听鼠标状态
 }
-
+/**
+ * free 可以指定 leftId / rightId
+ * fixed 必须指定 leftId / rightId
+ */
 class TqChart extends EventEmitter {
   constructor (opts) {
     super()
-    this.type = 'KLINE'
     this.divDomId = opts.id
     this.outerWidth = opts.width
     this.outerHeight = opts.height
     this.margin = opts.margin ? opts.margin : { top: 15, right: 50, bottom: 20, left: 80 }
     this.innerWidth = this.outerWidth - this.margin.left - this.margin.right
     this.innerHeight = this.outerHeight - this.margin.top - this.margin.bottom
-    /**
-     * free 可以指定 leftId / rightId
-     * fixed 必须指定 leftId / rightId
-     */
     this.mode = 'free' // free / fixed
     this.customRange = new ChartDataRange() // 记录用户指定的 leftId / rightId
     this.mainType = 'candle' //  candle / close
@@ -49,7 +47,6 @@ class TqChart extends EventEmitter {
     this.positionManager = new PositionManager(this) // 持仓块
 
     this.tqChartConsole = CreateConsole('TqChart', 'plum')
-    this.tqConsole = CreateConsole('Debug', 'cadetblue')
   }
 
   // 主要接口列表
@@ -165,21 +162,29 @@ class TqChart extends EventEmitter {
   }
 
   _initSvgNode () {
-    // 初始化 svg
+    // 初始化 svg ，整个图表的根结点
     this.svg = d3
       .select('#' + this.divDomId)
       .append('svg')
       .attr('class', 'tqchart')
       .attr('width', this.outerWidth)
       .attr('height', this.outerHeight)
-    // 按顺序生成一批节点
-    const nodesName = ['background', 'bgShapes', 'root', 'crosshair', 'loading']
-    for (const k of nodesName) {
-      this[k + 'G'] = this.svg
-        .append('g')
-        .attr('class', k + ' global')
-        .attr('transform', `translate(${this.margin.left},${this.margin.top})`)
-    }
+    this.defs = this.svg.append('defs')
+    const maskId = 'mask-global'
+    this.maskGlobal = TqChart.AppendMask(this.defs, maskId, this.innerWidth, this.innerHeight, 0, 0)
+
+    // 按顺序生成一批全局节点
+    const [left, top] = [this.margin.left, this.margin.top]
+    // 整个背景
+    this.backgroundG = TqChart.AppendG(this.svg, 'background global', left, top)
+    // board background
+    this.boardBackgroundG = TqChart.AppendG(this.svg, 'boardBackground global', left, top)
+    // this.bgShapesG = TqChart.AppendG(this.svg, 'bgShapes global', left, top, maskId)
+    this.rootG = TqChart.AppendG(this.svg, 'root global', left, top)
+    this.crosshairG = TqChart.AppendG(this.svg, 'crosshair global', left, top)
+    this.loadingG = TqChart.AppendG(this.svg, 'loading global', left, top)
+    this.bgShapesG = TqChart.AppendG(this.svg, 'bgShapes global', left, top, maskId)
+
     // 背景格子 竖线
     this.backgroundText = this.backgroundG.append('g').append('text')
     this.backgroundText.text(`${this.symbol} ${ParseDuartionToString(this.duration)}`).attr('dy', '-2')
@@ -441,7 +446,11 @@ class TqChart extends EventEmitter {
 
   draw () {
     if (this.mainSeries.last_id === -1) return
+    if (this.mainSeries.last_id - this.range.rightId === 1) {
+      this.chartController.setRange(this.mainSeries.last_id - this.bar.barNumbers + 1, this.mainSeries.last_id)
+    }
     const { leftId, rightId } = this.chartController.getRange()
+
     this.xAxis.draw(leftId, rightId, this.mainSeries.data)
     // this._drawBackground(leftId, rightId, this.mainSeries.data)
 
@@ -535,6 +544,27 @@ class TqChart extends EventEmitter {
       selections.exit().remove()
     }
   }
+}
+
+TqChart.AppendG = function (parent, className, left = 0, top = 0, maskId = '') {
+  const g = parent.append('g').attr('class', className)
+  if (left !== 0 || top !== 0) {
+    g.attr('transform', `translate(${left},${top})`)
+  }
+  if (maskId) {
+    g.attr('mask', `url(#${maskId})`)
+  }
+  return g
+}
+
+TqChart.AppendMask = function (parent, id, width = 100, height = 100, x = 0, y = 0) {
+  return parent.append('mask').attr('id', id)
+    .append('rect')
+    .attr('x', x).attr('y', y)
+    .attr('width', width)
+    .attr('height', height)
+    .style('fill', '#FFFFFF')
+    .attr('stroke', 'none')
 }
 
 export default TqChart

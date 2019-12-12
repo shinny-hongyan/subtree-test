@@ -40,6 +40,11 @@ class ChartBoard {
       .append('g')
       .attr('mask', 'url(#' + 'mask-' + this.boardId + ')')
       .attr('class', this.boardId + ' marks')
+    this.nameG = this.markG.append('text')
+      .attr('class', this.boardId + ' name text')
+      .attr('dy', '12')
+      .attr('dx', '2')
+      .text(this.boardId.toUpperCase())
 
     // 初始化 Y 轴
     this.leftYAxis = new YAxis(this, 'left')
