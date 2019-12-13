@@ -82,57 +82,7 @@
                 source: chartData
               }
             })
-        console.log(chartData)
       })
-//      this.$store.subscribe((mutation, state) => {
-//        if (mutation.type === 'mutation_clear_reports') {
-//          self.chartData = []
-//          self.init_balance = 0
-//          self.last_balance = 0
-//          self.max_balance = 0
-//          self.max_drawdown = 0
-//          self.max_drawdown_percent = 0
-//          self.daily_yield = []
-//        } else if (mutation.type === 'mutation_append_reports') {
-//          let id = self.$root.remoteDM.selectedReportsDefaultReportId
-//          self.selectReportObj = self.$root.remoteDM.selectedReportsMap[id]
-//          if (mutation.payload.aid === 'snapshot' && self.current_report_type === 'BACKTEST') {
-//            if (mutation.payload.datetime === 631123200000000000) {
-//              self.init_balance = mutation.payload.accounts.CNY.balance
-//              self.max_balance = mutation.payload.accounts.CNY.balance
-//              return
-//            }
-//            let datatime = Number.parseInt(mutation.payload.datetime / 1e6)
-//            let balance = mutation.payload.accounts.CNY.balance
-//            self.chartData.push([datatime, balance])
-//            self.$refs.echart.update({
-//              dataset: {
-//                source: self.chartData
-//              }
-//            })
-//            // 计算账户 收益率 最大回撤
-//            self.last_balance = balance
-//            if (balance > self.max_balance) {
-//              self.max_balance = balance
-//            }
-//            let drawdown = self.max_balance - balance
-//            let drawdown_percent = (self.max_balance - balance) / self.max_balance
-//            if (drawdown > self.max_drawdown) {
-//              self.max_drawdown = drawdown
-//            }
-//            if (drawdown_percent > self.max_drawdown_percent) {
-//              self.max_drawdown_percent = drawdown_percent
-//            }
-//            self.daily_yield.push(balance / mutation.payload.accounts.CNY.pre_balance - 1)
-//            let mean = math.mean(self.daily_yield)
-//            let rf = 0.0001
-//            let stddev = math.std(self.daily_yield)
-//            self.sharpe_ratio = stddev ? (250 ** (1 / 2) * (mean - rf) / stddev) : Number.POSITIVE_INFINITY
-//            let ror = balance / self.init_balance
-//            self.annual_yield = ror ** (250 / self.chartData.length)
-//          }
-//        }
-//      })
     }
   }
 </script>

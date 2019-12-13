@@ -83,19 +83,17 @@
         })
         if (!orders) return
         for(let order_id in orders){
-          if (orders[order_id]._epoch === self.$tqsdk.dm._epoch) {
-            if (self.ordersTr[order_id]) {
-              self.update_order(orders[order_id], self.ordersTr[order_id])
-            } else {
-              let tr = self.append_order(orders[order_id])
-              tr.onclick = function (event) {
-                let trs = self.tbodyNode.querySelectorAll('tr')
-                trs.forEach(node => node.className = '')
-                tr.className = 'selected'
-                self.$eventHub.$emit('moveChartToDt', orders[order_id].insert_date_time)
-              }
-              self.ordersTr[order_id] = tr
+          if (self.ordersTr[order_id]) {
+            self.update_order(orders[order_id], self.ordersTr[order_id])
+          } else {
+            let tr = self.append_order(orders[order_id])
+            tr.onclick = function (event) {
+              let trs = self.tbodyNode.querySelectorAll('tr')
+              trs.forEach(node => node.className = '')
+              tr.className = 'selected'
+              self.$eventHub.$emit('moveChartToDt', orders[order_id].insert_date_time)
             }
+            self.ordersTr[order_id] = tr
           }
         }
       })

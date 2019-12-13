@@ -1,13 +1,42 @@
 <template>
     <div class="backtest-info" :style="{height:height + 'px'}">
-        起始资金 {{init_balance| toFixed(2)}}
-        结束资金 {{balance | toFixed(2)}}
-        总收益 {{balance - init_balance | toFixed(2)}}
-        总收益率 {{ror | toFixed(2)}}
-        年化收益率 {{annual_yield | toFixed(2)}}
-        最大回撤 {{max_drawdown| toFixed(2)}}
-        总手续费 {{commission| toFixed(2)}}
-        年化夏普率 {{sharpe_ratio| toFixed(2)}}
+        <Row>
+            <Col :span="24" v-if="init_balance === '-'" class-name="spin-container">
+            <Spin fix>
+                <div class="loader">
+                    <svg class="circular" viewBox="25 25 50 50">
+                        <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="6" stroke-miterlimit="10"></circle>
+                    </svg>
+                </div>
+                回测进行中
+            </Spin>
+            </Col>
+        </Row>
+        <Row >
+            <Col :span="6">起始资金</Col>
+            <Col :span="6">{{init_balance| toFixed(2)}}</Col>
+            <Col :span="6">总收益</Col>
+            <Col :span="6">{{balance - init_balance | toFixed(2)}}</Col>
+
+            <Col :span="6">结束资金</Col>
+            <Col :span="6">{{balance| toFixed(2)}}</Col>
+            <Col :span="6">总收益率</Col>
+            <Col :span="6">{{ror | toFixed(2)}}%</Col>
+
+
+            <Col :span="6">最大回撤</Col>
+            <Col :span="6">{{max_drawdown | toFixed(2)}}</Col>
+            <Col :span="6">年化收益率</Col>
+            <Col :span="6">{{annual_yield | toFixed(2)}}%</Col>
+
+
+            <Col :span="6">总手续费</Col>
+            <Col :span="6">{{commission| toFixed(2)}}</Col>
+            <Col :span="6">年化夏普率</Col>
+            <Col :span="6">{{sharpe_ratio | toFixed(2)}}%</Col>
+
+            <Col :span="12">{{getMsg(ror)}}</Col>
+        </Row>
     </div>
 </template>
 <script>
@@ -81,5 +110,82 @@
 </script>
 <style lang="scss">
     .backtest-info {
+        .ivu-row {
+            .ivu-col {
+                &:nth-child(odd) {
+                    text-align: left;
+                    padding: 10px 0px 10px 16px;
+                }
+                &:nth-child(even) {
+                    text-align: right;
+                    padding: 10px 16px 10px 0px;
+                }
+            }
+        }
+
+        @keyframes ani-spin {
+            from { transform: rotate(0deg);}
+            50%  { transform: rotate(180deg);}
+            to   { transform: rotate(360deg);}
+        }
+        .ivu-col.spin-container{
+            height: 60px;
+            position: relative;
+            .loader {
+                width: 30px;
+                height: 30px;
+                position: relative;
+                margin: 0 auto;
+            }
+            .circular {
+                animation: rotate 2s linear infinite;
+                height: 100%;
+                transform-origin: center center;
+                width: 100%;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                margin: auto;
+            }
+            circle.path {
+                stroke-dasharray: 1,200;
+                stroke-dashoffset: 0;
+                animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+                stroke-linecap: round;
+            }
+        }
     }
+
+    @keyframes color {
+        0%, 100% {
+            stroke: #d62d20;
+        }
+        40% {
+            stroke: #0057e7;
+        }
+        66% {
+            stroke: #008744;
+        }
+        80%, 90% {
+            stroke: #ffa700;
+        }
+    }
+
+    @keyframes dash {
+        0% {
+            stroke-dasharray: 1,200;
+            stroke-dashoffset: 0;
+        }
+        50% {
+            stroke-dasharray: 89,200;
+            stroke-dashoffset: -35;
+        }
+        100% {
+            stroke-dasharray: 89,200;
+            stroke-dashoffset: -124;
+        }
+    }
+
 </style>

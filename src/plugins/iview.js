@@ -1,6 +1,5 @@
 // iview 按需引用
 import Vue from 'vue'
-import 'view-design/dist/styles/iview.css';
 import {LoadingBar, Message, Modal, Notice, Spin} from 'view-design';
 
 Vue.prototype.$Loading = LoadingBar;
@@ -9,8 +8,10 @@ Vue.prototype.$Modal = Modal;
 Vue.prototype.$Notice = Notice;
 Vue.prototype.$Spin = Spin;
 
-import {Layout, Icon, ButtonGroup, Button, Dropdown, DropdownMenu, DropdownItem, Badge, Radio, RadioGroup, Tabs, TabPane} from 'view-design';
+import {Layout, Row, Col, Icon, ButtonGroup, Button, Dropdown, DropdownMenu, DropdownItem, Badge, Radio, RadioGroup, Tabs, TabPane} from 'view-design';
 Vue.component('Layout', Layout);
+Vue.component('Row', Row);
+Vue.component('Col', Col);
 Vue.component('Icon', Icon);
 Vue.component('Button', Button);
 Vue.component('ButtonGroup', ButtonGroup);
@@ -22,13 +23,7 @@ Vue.component('Radio', Radio);
 Vue.component('RadioGroup', RadioGroup);
 Vue.component('Tabs', Tabs);
 Vue.component('TabPane', TabPane);
-
-
-
-
-
-
-
+Vue.component('Spin', Spin);
 
 // const components = {
 //     Affix,

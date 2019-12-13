@@ -15,6 +15,9 @@
 </script>
 
 <style lang="scss">
+
+    @import '../node_modules/view-design/dist/styles/iview.css';
+
     html, body {
         font-family: 'Avenir', Helvetica, Arial, sans-serif;
         -webkit-font-smoothing: antialiased;

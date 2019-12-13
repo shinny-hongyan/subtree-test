@@ -14,17 +14,17 @@
             <!-- 策略名称 -->
             {{$store.state.file_name}}
         </tq-layout-area>
-        <tq-layout-area :height="height" :left="height + 240" :width="300"
-                        :otherStyle="{paddingTop: '8px'}">
+        <tq-layout-area :height="height" :left="height + 240" :width="380"
+                        :otherStyle="{paddingTop: '8px', backgroundColor: $store.state.mode === 'backtest' ? '#FAF5EA' : '#FFF'}">
             <!-- 账户名称 / 回测区间 / 复盘时间、速度、控制器 -->
             <div v-if="$store.state.mode === 'run'">账户：{{$store.state.broker_id}},{{$store.state.account_id}} </div>
-            <div v-if="$store.state.mode === 'backtest'"> {{formatDt($store.state.start_dt)}} -- {{formatDt($store.state.end_dt)}} </div>
+            <div v-if="$store.state.mode === 'backtest'">回测区间： {{formatDt($store.state.start_dt)}} -- {{formatDt($store.state.end_dt)}} </div>
         </tq-layout-area>
         <tq-layout-area :height="height" :width="160" :horizontalAlign="'right'" :otherStyle="{paddingTop: '8px'}">
             <!-- py文件 / 行情状态 / 交易状态 -->
             <Badge :color="!$store.state.py_file_status ? 'red' : 'green'" text="py文件" />
             <Badge :color="!$store.state.md_url_status ? 'red' : 'green'" text="行情" />
-            <Badge v-if="$store.state.broker_id !== 'TQSIM'" :color="!$store.state.td_url_status ? 'red' : 'green'" text="交易" />
+            <Badge :color="!$store.state.td_url_status ? 'red' : 'green'" text="交易" />
         </tq-layout-area>
     </div>
 </template>
@@ -41,7 +41,7 @@
     },
     methods: {
       formatDt(dt) {
-        return moment(dt / 1000000).format('YYYY-MM-DD HH:mm:ss')
+        return moment(dt / 1e6).format('YYYY-MM-DD HH:mm:ss')
       }
     }
   }

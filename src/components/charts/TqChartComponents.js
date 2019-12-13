@@ -144,7 +144,7 @@ export default {
       // 更新持仓矩形
       self.updatePositionRect()
       // 如果是回测就定位到某个 trade 的位置去，只定位一次
-      if (self.action === 'run' && self.$tqsdk.get_by_path(['action']) === 'backtest') {
+      if (self.action === 'run' && self.$tqsdk.get_by_path(['action', 'mode']) === 'backtest') {
         // 得到某一个 trade, 定位到那里去
         let account_id = self.$store.state.account_id
         if (account_id) {

@@ -1,7 +1,7 @@
 <template>
     <div class="tq-bottom-view">
         <template v-if="$store.state.mode === 'backtest'">
-            <tq-layout-area :width="width / 2" :height="height - 27">
+            <tq-layout-area :width="width / 2" :height="height">
                 <Tabs :animated="false">
                     <TabPane label="回测指标">
                         <backtest-info :width="width" :height="height - 27"></backtest-info>
@@ -11,7 +11,8 @@
                     </TabPane>
                 </Tabs>
             </tq-layout-area>
-            <tq-layout-area horizontalAlign="right" :width="width / 2" :height="height - 27">
+            <tq-layout-area horizontalAlign="right" :width="width / 2" :height="height"
+                            :otherStyle="{borderLeft: '2px solid #E0E0E0'}">
                 <backtest-chart></backtest-chart>
             </tq-layout-area>
         </template>

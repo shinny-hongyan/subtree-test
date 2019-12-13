@@ -20,7 +20,7 @@
         <tq-layout-area class="right-view" :height="height" :width="rightWidth" horizontalAlign="right">
             <tq-layout-area v-if="$store.state.mode === 'run'"
                             :height="rightClosed ? height - 35 : 160" :width="rightWidth">
-                <quote-info v-if="$store.state.mode === 'run'" :symbol="instrumentId"></quote-info>
+                <quote-info v-if="$store.state.mode === 'run'" :symbol="instrumentId" :height="rightClosed ? height - 35 : 160" :width="rightWidth"></quote-info>
             </tq-layout-area>
             <tq-layout-area :top="$store.state.mode === 'run' ? 160 : 0" :height="rightClosed ? 0 : 18" :width="rightWidth"
                             :otherStyle="{

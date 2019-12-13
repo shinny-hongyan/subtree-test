@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import moment from 'moment'
 import App from './App.vue'
 import TQSDK from 'tqsdk'
 import './plugins/iview'
@@ -58,6 +59,11 @@ GetTqsdkUrl().then(function(urlJson){
   let ins_url = urlJson['ins_url']
   let md_url = urlJson['md_url']
   let ws_url = urlJson['ws_url']
+  if (ins_url === 'https://openmd.shinnytech.com/t/md/symbols/latest.json') {
+    let dt = moment().format('YYYY-MM-DD HH:mm:ss.SSSSSS')
+    ins_url = `https://openmd.shinnytech.com/t/md/symbols/${dt}.json`
+  }
+
   Vue.$tqsdk = new TQSDK({
     symbolsServerUrl: ins_url,
     wsQuoteUrl: md_url,

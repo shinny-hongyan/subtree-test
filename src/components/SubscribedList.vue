@@ -29,15 +29,19 @@
     mounted () {
       let self = this
       this.$tqsdk.on('rtn_data', function() {
-        let subList = self.$tqsdk.get_by_path(['subscribed'])
+        let subList = self.$tqsdk.getByPath(['subscribed'])
+        console.log('subscribed', subList)
         if (subList && subList._epoch === self.$tqsdk.dm._epoch) {
           for (let i in subList) {
             let item = subList[i]
+            console.log(i, item)
             if (Array.isArray(item.symbol)) {
               for (let j in item.symbol) {
+                console.log(item.symbol[j])
                 self.addSubscribed(item.symbol[j], item.dur_nano)
               }
             } else {
+              console.log(item.symbol)
               self.addSubscribed(item.symbol, item.dur_nano)
             }
           }
