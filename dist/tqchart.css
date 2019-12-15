@@ -1,0 +1,217 @@
+/*
+ * Theme definitions
+ */
+/*
+ * Implementation of themes
+ */
+/*
+ * scss content
+ */
+.theme-light svg.tqchart {
+  background-color: #FFFFFF;
+  color: #000000;
+}
+.theme-dark svg.tqchart {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+g.background line {
+  stroke-width: 1;
+}
+.theme-light g.background line.bgline {
+  stroke: #F6F6F6;
+}
+.theme-dark g.background line.bgline {
+  stroke: #666666;
+}
+.theme-light g.background line.border {
+  stroke: #BDBDBD;
+}
+.theme-dark g.background line.border {
+  stroke: #BDBDBD;
+}
+
+.theme-light g.bgShapes rect.highlight {
+  fill: rgba(249, 212, 241, 0.3);
+}
+.theme-dark g.bgShapes rect.highlight {
+  fill: rgba(194, 99, 173, 0.3);
+}
+
+.theme-light g.main.marks g.tradearrow path.up {
+  fill: #F44336;
+}
+.theme-dark g.main.marks g.tradearrow path.up {
+  fill: #F44336;
+}
+.theme-light g.main.marks g.tradearrow path.down {
+  stroke: #4CAF50;
+}
+.theme-dark g.main.marks g.tradearrow path.down {
+  stroke: #4CAF50;
+}
+g.main.marks g.posrect rect {
+  fill-opacity: 0.2;
+}
+.theme-light g.main.marks g.posrect rect.profit {
+  fill: #F44336;
+}
+.theme-dark g.main.marks g.posrect rect.profit {
+  fill: #F44336;
+}
+.theme-light g.main.marks g.posrect rect.loss {
+  fill: #4CAF50;
+}
+.theme-dark g.main.marks g.posrect rect.loss {
+  fill: #4CAF50;
+}
+
+.theme-light text {
+  fill: #000000;
+}
+.theme-dark text {
+  fill: #FFFFFF;
+}
+
+path {
+  fill: none;
+}
+
+text.symbol {
+  fill: #F44336;
+}
+
+g.loading text {
+  fill: #CCCCCC;
+}
+
+path.candle,
+path.kline,
+path.klines,
+path.volume {
+  stroke-width: 1;
+  cursor: pointer;
+}
+.theme-light path.candle,
+.theme-light path.kline,
+.theme-light path.klines,
+.theme-light path.volume {
+  stroke: #000000;
+}
+.theme-dark path.candle,
+.theme-dark path.kline,
+.theme-dark path.klines,
+.theme-dark path.volume {
+  stroke: #FFFFFF;
+}
+path.candle.body.up,
+path.kline.body.up,
+path.klines.body.up,
+path.volume.body.up {
+  stroke-width: 1;
+}
+.theme-light path.candle.body.up,
+.theme-light path.kline.body.up,
+.theme-light path.klines.body.up,
+.theme-light path.volume.body.up {
+  stroke: #F44336;
+  fill: #FFFFFF;
+}
+.theme-dark path.candle.body.up,
+.theme-dark path.kline.body.up,
+.theme-dark path.klines.body.up,
+.theme-dark path.volume.body.up {
+  stroke: #F44336;
+  fill: #000000;
+}
+path.candle.body.down,
+path.kline.body.down,
+path.klines.body.down,
+path.volume.body.down {
+  stroke-width: 0;
+}
+.theme-light path.candle.body.down,
+.theme-light path.kline.body.down,
+.theme-light path.klines.body.down,
+.theme-light path.volume.body.down {
+  fill: #4CAF50;
+}
+.theme-dark path.candle.body.down,
+.theme-dark path.kline.body.down,
+.theme-dark path.klines.body.down,
+.theme-dark path.volume.body.down {
+  fill: #4CAF50;
+}
+path.candle.line.up,
+path.kline.line.up,
+path.klines.line.up,
+path.volume.line.up {
+  fill: none;
+}
+.theme-light path.candle.line.up,
+.theme-light path.kline.line.up,
+.theme-light path.klines.line.up,
+.theme-light path.volume.line.up {
+  stroke: #F44336;
+}
+.theme-dark path.candle.line.up,
+.theme-dark path.kline.line.up,
+.theme-dark path.klines.line.up,
+.theme-dark path.volume.line.up {
+  stroke: #F44336;
+}
+path.candle.line.down,
+path.kline.line.down,
+path.klines.line.down,
+path.volume.line.down {
+  fill: none;
+}
+.theme-light path.candle.line.down,
+.theme-light path.kline.line.down,
+.theme-light path.klines.line.down,
+.theme-light path.volume.line.down {
+  stroke: #4CAF50;
+}
+.theme-dark path.candle.line.down,
+.theme-dark path.kline.line.down,
+.theme-dark path.klines.line.down,
+.theme-dark path.volume.line.down {
+  stroke: #4CAF50;
+}
+
+path.oi {
+  stroke-width: 1;
+  stroke: #C62828;
+}
+
+rect.crosshair-cursor {
+  fill: transparent;
+  stroke: none;
+}
+
+rect.crosshair-cursor.drag {
+  cursor: grabbing;
+}
+
+g.kline.panel rect {
+  fill-opacity: 0.98;
+}
+.theme-light g.kline.panel rect {
+  fill: #F6F6F6;
+}
+.theme-dark g.kline.panel rect {
+  fill: #666666;
+}
+.theme-light g.kline.panel text {
+  fill: #000000;
+}
+.theme-dark g.kline.panel text {
+  fill: #FFFFFF;
+}
+g.kline.panel text tspan.up {
+  fill: #F44336;
+}
+g.kline.panel text tspan.down {
+  fill: #4CAF50;
+}

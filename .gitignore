@@ -65,7 +65,6 @@ typings/
 .idea/
 .vscode/
 .reports/
-dist/
 doc/
 
 nohup.out
