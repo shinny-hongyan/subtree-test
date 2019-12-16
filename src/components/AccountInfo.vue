@@ -27,7 +27,6 @@
       }
     },
     mounted () {
-      let self = this
       this.update()
       this.$tqsdk.on('rtn_data', this.update)
     },

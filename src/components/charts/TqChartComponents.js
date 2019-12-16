@@ -1,5 +1,7 @@
 import Vue from 'vue'
+
 import TqChart from 'tqchart'
+import 'tqchart/dist/tqchart.css'
 const CHART_ID = 'web_chart'
 const CHART_ID_FOCUS = 'web_chart_focus'
 let klines = null

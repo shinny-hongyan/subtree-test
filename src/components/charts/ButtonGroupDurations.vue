@@ -42,7 +42,6 @@
         document.querySelectorAll('.tq-button-group-durations input[type=radio]').forEach(item => item.blur())
         this.selectedDuration = Periods[this.selectedPeriod]
         if (this.selectedPeriod && this.selectedDuration) {
-          console.log(this.selectedPeriod, this.selectedDuration)
           this.$emit('onChangeDuration', this.selectedDuration)
         }
       }

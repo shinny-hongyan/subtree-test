@@ -148,7 +148,6 @@
           this.instrumentId = Array.isArray(this.subscribed[i].symbol) ? this.subscribed[i].symbol[0] : this.subscribed[i].symbol
           this.duration = this.subscribed[i].dur_nano || 60 * 1e9
         }
-        console.log(d)
       }
     },
     created () {

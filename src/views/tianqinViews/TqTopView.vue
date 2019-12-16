@@ -96,11 +96,9 @@
         this.rightClosed = !this.rightClosed
       },
       onChangeDuration(d) {
-        console.log('onChangeDuration', d)
         this.duration = d
       },
       onChangeSelectedSubscribed(symbol, dur_nano){
-        console.log(symbol, dur_nano)
         this.instrumentId = symbol
         this.duration = dur_nano ? dur_nano : 60000000000
       }

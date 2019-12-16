@@ -160,7 +160,6 @@
     },
     watch: {
       symbol: function (n, o) {
-        console.log('subscribe_quote', n, o)
         this.$tqsdk.subscribeQuote(this.symbol)
         let quote = this.$tqsdk.getQuote(this.symbol)
         updateObject(this.quote, quote)
@@ -184,7 +183,6 @@
       this.$tqsdk.subscribe_quote(this.symbol)
       this.$tqsdk.on('rtn_data', function() {
         let quote = self.$tqsdk.getQuote(self.symbol)
-        console.log(quote)
         updateObject(self.quote, quote)
       })
     },
