@@ -31,7 +31,7 @@ class Candle extends BasePath {
     const _path = {}
     this.paths.forEach(function (k) { _path[k] = '' })
     for (let i = leftId; i <= rightId; i++) {
-      if (this.id === 'kline') console.info(i, data, data[i])
+      // if (this.id === 'kline') console.info(i, data, data[i])
       if (!data[i]) continue
       UpDownEqualKeys.forEach(key => {
         if (UpDownEqual[key](data[i])) {

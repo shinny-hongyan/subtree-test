@@ -6616,7 +6616,7 @@ class Candle extends BasePath {
     });
 
     for (let i = leftId; i <= rightId; i++) {
-      if (this.id === 'kline') console.info(i, data, data[i]);
+      // if (this.id === 'kline') console.info(i, data, data[i])
       if (!data[i]) continue;
       UpDownEqualKeys.forEach(key => {
         if (UpDownEqual[key](data[i])) {
@@ -8516,16 +8516,18 @@ class TqChart extends eventemitter3 {
     const boardesDomains = {};
 
     for (const plotId in this.plots) {
-      const domain = this.plots[plotId].getYDomain(leftId, rightId, this.plots[plotId].data || this.mainSeries.data); // if (!domain[0] || !domain[1]) continue
+      const domain = this.plots[plotId].getYDomain(leftId, rightId, this.plots[plotId].data || this.mainSeries.data);
 
-      const boardId = this.plots[plotId].boardId;
-      const yAlign = this.plots[plotId].yAlign;
-      boardesDomains[boardId] = boardesDomains[boardId] || {
-        left: [Infinity, -Infinity],
-        right: [Infinity, -Infinity]
-      };
-      boardesDomains[boardId][yAlign][0] = Math.min(boardesDomains[boardId][yAlign][0], domain[0]);
-      boardesDomains[boardId][yAlign][1] = Math.max(boardesDomains[boardId][yAlign][1], domain[1]);
+      if (Number.isFinite(domain[0]) || Number.isFinite(domain[1])) {
+        const boardId = this.plots[plotId].boardId;
+        const yAlign = this.plots[plotId].yAlign;
+        boardesDomains[boardId] = boardesDomains[boardId] || {
+          left: [Infinity, -Infinity],
+          right: [Infinity, -Infinity]
+        };
+        boardesDomains[boardId][yAlign][0] = Math.min(boardesDomains[boardId][yAlign][0], domain[0]);
+        boardesDomains[boardId][yAlign][1] = Math.max(boardesDomains[boardId][yAlign][1], domain[1]);
+      }
     } // boards draw
 
 
