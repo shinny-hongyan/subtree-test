@@ -21,24 +21,32 @@
     props: {
       height: Number
     },
+    computed: {
+      account_id () {
+        return this.$store.state.account_id
+      }
+    },
     mounted () {
       let self = this
-      this.$tqsdk.on('rtn_data', function() {
-        let account_id = self.$store.state.account_id
-        if (!account_id) return
-        let account = self.$tqsdk.get({
+      this.update()
+      this.$tqsdk.on('rtn_data', this.update)
+    },
+    methods: {
+      update () {
+        if (!this.account_id) return
+        let account = this.$tqsdk.get({
           name: 'account',
-          user_id: account_id,
+          user_id: this.account_id,
           currency: 'CNY'
         })
-        if (account._epoch === self.$tqsdk.dm._epoch) {
-          self.available = account.available
-          self.balance = account.balance
-          self.commission = account.commission
-          self.float_profit = account.float_profit
-          self.margin = account.margin
+        if (account._epoch === this.$tqsdk.dm._epoch) {
+          this.available = account.available
+          this.balance = account.balance
+          this.commission = account.commission
+          this.float_profit = account.float_profit
+          this.margin = account.margin
         }
-      })
+      }
     }
   }
 </script>

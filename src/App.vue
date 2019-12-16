@@ -40,5 +40,5 @@
         text-align: center;
         overflow: hidden;
     }
-    @import "~tqchart/dist/tqchart";
+    @import "~tqchart/dist/tqchart.css";
 </style>

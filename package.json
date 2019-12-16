@@ -16,7 +16,7 @@
     "moment": "^2.24.0",
     "register-service-worker": "^1.6.2",
     "stats.js": "^0.17.0",
-    "tqchart": "file:../tqchart",
+    "tqchart": "git+https://github.com/shinnytech/tianqin-kchart.git",
     "tqsdk": "file:../tqsdk-js",
     "view-design": "^4.0.2",
     "vue": "^2.6.10",
