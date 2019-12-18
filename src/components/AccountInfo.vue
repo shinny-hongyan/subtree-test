@@ -27,7 +27,7 @@
       }
     },
     mounted () {
-      this.update()
+      setImmediate(this.update.bind(this))
       this.$tqsdk.on('rtn_data', this.update)
     },
     methods: {
