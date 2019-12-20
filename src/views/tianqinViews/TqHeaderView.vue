@@ -19,6 +19,9 @@
             <!-- 账户名称 / 回测区间 / 复盘时间、速度、控制器 -->
             <div v-if="$store.state.mode === 'run'">账户：{{$store.state.broker_id}},{{$store.state.account_id}} </div>
             <div v-if="$store.state.mode === 'backtest'">回测区间： {{formatDt($store.state.start_dt)}} -- {{formatDt($store.state.end_dt)}} </div>
+            <div v-if="$store.state.mode === 'replay'">
+                <tq-replay-ctrl></tq-replay-ctrl>
+            </div>
         </tq-layout-area>
         <tq-layout-area :height="height" :width="160" :horizontalAlign="'right'" :otherStyle="{paddingTop: '8px'}">
             <!-- py文件 / 行情状态 / 交易状态 -->
@@ -30,18 +33,20 @@
 </template>
 <script>
   import TqLayoutArea from '@/components/layouts/TqLayoutArea.vue'
+  import TqReplayCtrl from '@/components/TqReplayCtrl.vue'
   import moment from 'moment'
   export default {
     name: 'tq-header-view',
     components: {
-      TqLayoutArea
+      TqLayoutArea,
+      TqReplayCtrl
     },
     props: {
       height: Number
     },
     methods: {
-      formatDt(dt) {
-        return moment(dt / 1e6).format('YYYY-MM-DD HH:mm:ss')
+      formatDt(dt, format='YYYY-MM-DD HH:mm:ss') {
+        return moment(dt / 1e6).format(format)
       }
     }
   }

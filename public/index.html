@@ -15,10 +15,10 @@
 <script>
   const GetTqsdkUrl = function () {
     return new Promise(function (resolve, reject) {
-      resolve({
-        ins_url: 'https://openmd.shinnytech.com/t/md/symbols/latest.json',
-        md_url: 'wss://openmd.shinnytech.com/t/md/front/mobile',
-        ws_url: 'ws://127.0.0.1:49687'
+      fetch('http://127.0.0.1:54502/urlcors').then(function(response) {
+        response.json().then(function(json){
+          resolve(json)
+        })
       })
     })
   }

@@ -18,11 +18,11 @@
             </tq-layout-area>
         </tq-layout-area>
         <tq-layout-area class="right-view" :height="height" :width="rightWidth" horizontalAlign="right">
-            <tq-layout-area v-if="$store.state.mode === 'run'"
+            <tq-layout-area v-if="$store.state.mode !== 'backtest'"
                             :height="rightClosed ? height - 35 : 160" :width="rightWidth">
-                <quote-info v-if="$store.state.mode === 'run'" :symbol="instrumentId" :height="rightClosed ? height - 35 : 160" :width="rightWidth"></quote-info>
+                <quote-info v-if="$store.state.mode !== 'backtest'" :symbol="instrumentId" :height="rightClosed ? height - 35 : 160" :width="rightWidth"></quote-info>
             </tq-layout-area>
-            <tq-layout-area :top="$store.state.mode === 'run' ? 160 : 0" :height="rightClosed ? 0 : 18" :width="rightWidth"
+            <tq-layout-area :top="$store.state.mode !== 'backtest' ? 160 : 0" :height="rightClosed ? 0 : 18" :width="rightWidth"
                             :otherStyle="{
                                 backgroundColor: 'lightgrey',
                                 color: '#333333',
@@ -33,14 +33,14 @@
                 订阅合约列表
             </tq-layout-area>
             <tq-layout-area :verticalAlign="'bottom'" :bottom="35"
-                            :height="rightClosed ? 0 : height-($store.state.mode === 'run' ? 160 : 0)-18-35"
+                            :height="rightClosed ? 0 : height-($store.state.mode !== 'backtest' ? 160 : 0)-18-35"
                             :width="rightWidth" :otherStyle="{overflowY: 'scroll'}">
                 <subscribed-list @onChange="onChangeSelectedSubscribed"></subscribed-list>
             </tq-layout-area>
             <tq-layout-area :verticalAlign="'bottom'" :height="35" :width="rightWidth">
                 <about-us :width="rightWidth"></about-us>
             </tq-layout-area>
-            <div v-if="$store.state.mode === 'run'" class="right-resize-tool" @click="toggleRightClosed">
+            <div v-if="$store.state.mode !== 'backtest'" class="right-resize-tool" @click="toggleRightClosed">
                 <Icon v-if="!rightClosed" type="ios-arrow-forward" />
                 <Icon v-else type="ios-arrow-back" />
             </div>

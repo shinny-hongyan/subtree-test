@@ -16,7 +16,7 @@
                 <backtest-chart></backtest-chart>
             </tq-layout-area>
         </template>
-        <template v-else-if="$store.state.mode === 'run'">
+        <template v-else-if="$store.state.mode === 'run' || $store.state.mode === 'replay'">
             <tq-layout-area :height="26" :width="width">
                 <account-info :height="26"></account-info>
             </tq-layout-area>

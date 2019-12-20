@@ -63,6 +63,13 @@ GetTqsdkUrl().then(function(urlJson){
     let dt = moment().format('YYYY-MM-DD HH:mm:ss.SSSSSS')
     ins_url = `https://openmd.shinnytech.com/t/md/symbols/${dt}.json`
   }
+  if (urlJson['replay_dt']) {
+    let index = ins_url.indexOf('/symbol')
+    store.state.ctrl_url = ins_url.substring(0, index)
+    let dt = moment(urlJson['replay_dt']/1e6).format('YYYY-MM-DD HH:mm:ss')
+    dt += (Math.random() + '').substring(2, 8)
+    ins_url = `https://openmd.shinnytech.com/t/md/symbols/${dt}.json`
+  }
 
   Vue.$tqsdk = new TQSDK({
     symbolsServerUrl: ins_url,
@@ -75,6 +82,10 @@ GetTqsdkUrl().then(function(urlJson){
     if (backtest && backtest.current_dt) {
       store.state.start_dt = backtest.start_dt
       store.state.end_dt = backtest.end_dt
+    }
+    let replay = Vue.$tqsdk.get_by_path(['_tqsdk_replay'])
+    if (replay && replay.replay_dt) {
+      store.state.replay_dt = replay.replay_dt
     }
     let action = Vue.$tqsdk.get_by_path(['action'])
     if (store.state.mode === '' && action)
