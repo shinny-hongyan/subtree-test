@@ -1,6 +1,6 @@
 <template>
     <div class="replay-control">
-        复盘日期： {{formatDt($store.state.replay_dt)}} ({{this.currentSpeed}})
+        复盘日期： {{currentDateTime ? currentDateTime : formatDt($store.state.replay_dt)}} ({{this.currentSpeed}})
         <ButtonGroup size="small">
             <Button @click="ctrl('play')">
                 <Icon type="ios-play"></Icon>
@@ -25,7 +25,8 @@
     data: function () {
       return {
         // todo: 初始值目前无法获取，等服务器添加接口后，改成获取当前复盘速度
-        currentSpeed: '-'
+        currentSpeed: '-',
+        currentDateTime: ''
       }
     },
     props: {
@@ -82,6 +83,27 @@
       formatDt(dt, format='YYYY-MM-DD') {
         return moment(dt / 1e6).format(format)
       }
+    },
+    mounted () {
+      let self = this
+      // this.$tqsdk.subscribe_quote('')
+      let quoteList = ['KQ.m@SHFE.au', 'KQ.m@SHFE.ag', 'KQ.m@CFFEX.T', 'KQ.m@CFFEX.TF']
+      this.$tqsdk.on('rtn_data', function () {
+        let ins_list = self.$tqsdk.getByPath(['ins_list'])
+        if (ins_list === '' || ins_list.indexOf('KQ.m@SHFE.au') === -1
+          || ins_list.indexOf('KQ.m@SHFE.ag') === -1
+          || ins_list.indexOf('KQ.m@CFFEX.T') === -1
+          || ins_list.indexOf('KQ.m@CFFEX.TF') === -1
+        ) {
+          ins_list += ((ins_list ? ',' : '') + quoteList.join(','))
+          self.$tqsdk.subscribe_quote(ins_list)
+        }
+
+        for (let quote of quoteList) {
+          let dt = self.$tqsdk.get_by_path(['quotes', quote, 'datetime'])
+          self.currentDateTime = (dt && dt > self.currentDateTime) ? dt.slice(0, 19) : self.currentDateTime
+        }
+      })
     }
   }
 </script>

@@ -15,7 +15,7 @@
             {{$store.state.file_name}}
         </tq-layout-area>
         <tq-layout-area :height="height" :left="height + 240" :width="380"
-                        :otherStyle="{paddingTop: '8px', backgroundColor: $store.state.mode === 'backtest' ? '#FAF5EA' : '#FFF'}">
+                        :otherStyle="{paddingTop: '8px', backgroundColor: $store.state.mode === 'backtest' ? '#FAF5EA' : $store.state.mode === 'replay' ? '#F0E2FA' : '#FFF'}">
             <!-- 账户名称 / 回测区间 / 复盘时间、速度、控制器 -->
             <div v-if="$store.state.mode === 'run'">账户：{{$store.state.broker_id}},{{$store.state.account_id}} </div>
             <div v-if="$store.state.mode === 'backtest'">回测区间： {{formatDt($store.state.start_dt)}} -- {{formatDt($store.state.end_dt)}} </div>
