@@ -71,7 +71,7 @@
       height: Number,
     },
     data () {
-      let rightOpenedWidth = 200
+      let rightOpenedWidth = 240
       let rightClosedWidth = 80
       return {
         rightClosed: false,

@@ -76,7 +76,7 @@
             总手
             </Col>
             <Col :span="largeSize ? 6 : 24" :class="classOfColor">
-            {{quote.volume}}
+            {{formatterVolume(quote.volume)}}
             </Col>
             <Col :span="largeSize ? 6 : 24">
             最低
@@ -118,7 +118,7 @@
             <Col :span="largeSize ? 6 : '0'">
             日增</Col>
             <Col :span="largeSize ? 6 : '0'">
-            {{quote.open_interest - quote.pre_open_interest }}</Col>
+            {{Number.isNaN(quote.open_interest - quote.pre_open_interest) ? '-' : quote.open_interest - quote.pre_open_interest}}</Col>
         </Row>
     </div>
 </template>
@@ -189,6 +189,14 @@
     methods : {
       formatter: function (price) {
         return FormatPrice(price, this.quote.price_decs)
+      },
+      formatterVolume: function (volume) {
+        if (typeof volume !== "number") return volume
+        if (volume > 100000000) {
+            return (volume / 100000000).toFixed(1) + '亿'
+        } else if (volume > 10000) {
+          return (volume / 100000000).toFixed(1) + '万'
+        } else return volume
       }
     }
   }
