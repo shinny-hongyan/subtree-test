@@ -1,6 +1,6 @@
 <template>
     <div class="replay-control">
-        复盘日期： {{formatDt($store.state.replay_dt)}} ({{this.currentSpeed | toFixed(1)}})
+        复盘日期： {{formatDt($store.state.replay_dt)}} ({{this.currentSpeed}})
         <ButtonGroup size="small">
             <Button @click="ctrl('play')">
                 <Icon type="ios-play"></Icon>
@@ -24,7 +24,8 @@
     name: "tq-replay-control",
     data: function () {
       return {
-        currentSpeed: 1
+        // todo: 初始值目前无法获取，等服务器添加接口后，改成获取当前复盘速度
+        currentSpeed: '-'
       }
     },
     props: {
@@ -46,22 +47,35 @@
       },
       ctrl(action) {
         if (action === "play") {
+          if (this.currentSpeed === '-') {
+            this.currentSpeed = 1
+          }
           this.setSpeed(this.currentSpeed)
         } else if (action === "pause") {
           this.setSpeed(0)
         } else if (action === "rewind") {
-          if (Math.abs(this.currentSpeed - 1.1) < 0.00001) this.currentSpeed = Math.max(0.1, this.currentSpeed - 0.1)
-          else if (Math.abs(this.currentSpeed - 2.1) < 0.00001) this.currentSpeed -= 0.2
-          else if (Math.abs(this.currentSpeed - 5.1) < 0.00001) this.currentSpeed -= 0.5
-          else if (Math.abs(this.currentSpeed - 11.1) < 0.00001) this.currentSpeed -= 1.0
-          else this.currentSpeed = 10.0
+          if (this.currentSpeed === '-') {
+            this.currentSpeed = 1
+          } else if (this.currentSpeed <= 5) {
+            this.currentSpeed = Math.max(1, this.currentSpeed - 1)
+          } else if (this.currentSpeed <= 40){
+            this.currentSpeed -= 5
+          } else if (this.currentSpeed <= 100) {
+            this.currentSpeed -= 10
+          }
           this.setSpeed(this.currentSpeed)
         } else if (action === "fastforward") {
-          if (Math.abs(this.currentSpeed - 1.0) < 0.00001) this.currentSpeed += 0.1
-          else if (Math.abs(this.currentSpeed - 2.0) < 0.00001) this.currentSpeed += 0.2
-          else if (Math.abs(this.currentSpeed - 5.0) < 0.00001) this.currentSpeed += 0.5
-          else if (Math.abs(this.currentSpeed - 10.0) < 0.00001) this.currentSpeed += 1.0
-          else this.currentSpeed = 100
+          if (this.currentSpeed === '-') {
+            this.currentSpeed = 2
+          } else if (this.currentSpeed < 5) {
+            this.currentSpeed += 1
+          } else if (this.currentSpeed < 40){
+            this.currentSpeed += 5
+          } else if (this.currentSpeed < 100) {
+            this.currentSpeed += 10
+          } else {
+            this.currentSpeed = 100
+          }
           this.setSpeed(this.currentSpeed)
         }
       },
