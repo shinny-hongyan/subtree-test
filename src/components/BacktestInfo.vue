@@ -38,7 +38,7 @@
             <Col :span="6">胜率</Col>
             <Col :span="6">{{winning_rate| toFixed(2)}}</Col>
             <Col :span="6">每手盈亏额比</Col>
-            <Col :span="6">{{profit_loss_ratio | toFixed(2)}}%</Col>
+            <Col :span="6">{{profit_loss_ratio | toFixed(2)}}</Col>
 
             <Col :span="12" :style="{color:'#bd0000'}">天勤量化：{{getMsg(ror)}}</Col>
         </Row>
