@@ -35,7 +35,12 @@
             <Col :span="6">年化夏普率</Col>
             <Col :span="6">{{sharpe_ratio | toFixed(2)}}%</Col>
 
-            <Col :span="12">{{getMsg(ror)}}</Col>
+            <Col :span="6">胜率</Col>
+            <Col :span="6">{{winning_rate| toFixed(2)}}</Col>
+            <Col :span="6">每手盈亏额比</Col>
+            <Col :span="6">{{profit_loss_ratio | toFixed(2)}}%</Col>
+
+            <Col :span="12">天勤量化：{{getMsg(ror)}}</Col>
         </Row>
     </div>
 </template>
@@ -82,7 +87,6 @@
       let self = this
       this.$tqsdk.on('rtn_data', function() {
         let account_id = self.$store.state.account_id
-        console.log(account_id, 'd account_id')
         if (!account_id) return
         let account = self.$tqsdk.get({
           name: 'account',
@@ -96,6 +100,8 @@
           self.annual_yield = account._tqsdk_stat.annual_yield
           self.ror = account._tqsdk_stat.ror
           self.sharpe_ratio = account._tqsdk_stat.sharpe_ratio
+          self.winning_rate = account._tqsdk_stat.winning_rate
+          self.profit_loss_ratio = account._tqsdk_stat.profit_loss_ratio
           let trades = self.$tqsdk.get({
             name: 'trades',
             user_id: account_id
