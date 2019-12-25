@@ -21,19 +21,19 @@
             <Col :span="6">结束资金</Col>
             <Col :span="6">{{balance| toFixed(2)}}</Col>
             <Col :span="6">总收益率</Col>
-            <Col :span="6">{{ror | toFixed(2)}}%</Col>
+            <Col :span="6">{{ror * 100 | toFixed(2)}}%</Col>
 
 
             <Col :span="6">最大回撤</Col>
-            <Col :span="6">{{max_drawdown | toFixed(2)}}</Col>
+            <Col :span="6">{{max_drawdown * 100 | toFixed(2)}}%</Col>
             <Col :span="6">年化收益率</Col>
-            <Col :span="6">{{annual_yield | toFixed(2)}}%</Col>
+            <Col :span="6">{{annual_yield * 100 | toFixed(2)}}%</Col>
 
 
             <Col :span="6">总手续费</Col>
             <Col :span="6">{{commission| toFixed(2)}}</Col>
             <Col :span="6">年化夏普率</Col>
-            <Col :span="6">{{sharpe_ratio | toFixed(2)}}%</Col>
+            <Col :span="6">{{sharpe_ratio | toFixed(2)}}</Col>
 
             <Col :span="6">胜率</Col>
             <Col :span="6">{{winning_rate| toFixed(2)}}</Col>
@@ -55,7 +55,9 @@
         annual_yield: '-',
         max_drawdown: '-',
         sharpe_ratio: '-',
-        commission: '-'
+        commission: '-',
+        winning_rate: '-',
+        profit_loss_ratio: '-'
       }
     },
     props: {
