@@ -74,9 +74,11 @@ GetTqsdkUrl().then(function(urlJson){
   Vue.$tqsdk = new TQSDK({
     symbolsServerUrl: ins_url,
     wsQuoteUrl: md_url,
-    wsTradeUrl: ws_url
+    autoInit: false
   })
   Vue.prototype.$tqsdk = Vue.$tqsdk
+  Vue.$tqsdk.initMdWebsocket()
+  Vue.$tqsdk.addWebSocket(ws_url)
   Vue.$tqsdk.on('rtn_data', function(){
     let backtest = Vue.$tqsdk.get_by_path(['_tqsdk_backtest'])
     if (backtest && backtest.current_dt) {
